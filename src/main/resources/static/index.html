@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phone Validator</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./script.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <input id="phone-input" placeholder="Phone" onkeyup="validatePhone(this.value)">
+
+        <div id="countryWrapper" class="countryWrapper hidden">
+            <img id="country-flag" src="./flags/globe.svg" onerror="this.src = './flags/globe.svg'">
+            <span id="country"></span>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+:root {
+    --input-height: 48px;
+    --pad: 6px;
+    --country-section-height: 48px;
+    --flag-height: 36px;
+
+    --wrapperHeight: calc(var(--input-height) + var(--pad) + var(--country-section-height));
+}
+
+.hidden {
+    display: none;
+}
+
+body {
+    font-family: monospace;
+    height: 100vh;
+    width: 100vw;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+body .wrapper {
+    padding-top: calc((100vh - calc(var(--wrapperHeight) / 2)) / 2);
+    height: var(--wrapperHeight);
+}
+
+body .wrapper input {
+    height: var(--input-height);
+    border: #cccccc solid 1px;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1.25rem;
+    padding-left: var(--pad);
+}
+
+body .wrapper input:focus {
+    border: #cccccc solid 1px;
+    border-radius: 5px;
+}
+
+body .wrapper input.invalid {
+    border-color: lightcoral;
+    background-color: #f0808021;
+}
+
+body .wrapper input.valid {
+    border-color: lightgreen;
+    background-color: #90ee901f;
+}
+
+body .wrapper .countryWrapper {
+    padding-top: var(--pad);
+    height: var(--country-section-height);
+}
+
+body .wrapper .countryWrapper img {
+    height: var(--flag-height);
+}
