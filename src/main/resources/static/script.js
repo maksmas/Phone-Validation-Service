@@ -2,19 +2,26 @@ const DEBOUNCE_MS = 500;
 const VALIDATE_ENDPOINT = "/validate";
 
 function validatePhone(phone) {
-    if (phone && phone.length > 0) {
-        let validationFlow = () => _sendValidateRequest(phone).then(
-            validationResponse => _handleValidationResponse(validationResponse)
-        );
+    if (phone && phone.length > 1) {
+        if (phone[0] === "+") {
+            let validationFlow = () => _sendValidateRequest(phone).then(
+                validationResponse => _handleValidationResponse(validationResponse)
+            );
 
-        _debounce(validationFlow, DEBOUNCE_MS);
+            _debounce(validationFlow, DEBOUNCE_MS);
+        } else {
+            _clearCountrySection();
+            _highlightInputAsInvalid();
+        }
     } else {
         _reset();
     }
 }
 
 function _sendValidateRequest(phone) {
-    return fetch(`${VALIDATE_ENDPOINT}?phone=${phone}`).then(
+    const encodedPlus = encodeURIComponent("+");
+
+    return fetch(`${VALIDATE_ENDPOINT}?phone=${encodedPlus}${phone.substring(1)}`).then(
         wrappedResponse => wrappedResponse.json()
     );
 }
@@ -22,21 +29,38 @@ function _sendValidateRequest(phone) {
 function _handleValidationResponse(validationResponse) {
     if (validationResponse.valid) {
         _highlightInputAsValid();
-        _displayCountrySection(validationResponse.countryCode);
+        _displayCountrySection(validationResponse.countries);
     } else {
-        _hideCountrySection();
+        _clearCountrySection();
         _highlightInputAsInvalid();
     }
 }
 
-function _hideCountrySection() {
-    document.getElementById("countryWrapper").classList.add("hidden");
+function _clearCountrySection() {
+    const countryWrapper = document.getElementById("countryWrapper");
+
+    while (countryWrapper.firstChild) {
+        countryWrapper.removeChild(countryWrapper.firstChild);
+    }
 }
 
-function _displayCountrySection(countryCode) {
-    document.getElementById("countryWrapper").classList.remove("hidden");
-    document.getElementById("country").innerText = countryCode;
-    document.getElementById("country-flag").src = `./flags/${countryCode.toLowerCase()}.svg`;
+function _displayCountrySection(countries) {
+    _clearCountrySection();
+
+    const wrapperElement = document.getElementById("countryWrapper");
+
+    for (const country of countries) {
+        let imgElement = document.createElement("img");
+        imgElement.setAttribute("src", `./flags/${country.code}.svg`);
+        imgElement.setAttribute("onerror", "this.src = './flags/globe.svg'");
+
+        let spanElement = document.createElement("span");
+        spanElement.appendChild(document.createTextNode(`${country.title} (${country.code})`));
+
+        wrapperElement.appendChild(imgElement);
+        wrapperElement.appendChild(spanElement);
+        wrapperElement.appendChild(document.createElement("br"));
+    }
 }
 
 function _highlightInputAsInvalid() {
@@ -54,7 +78,7 @@ function _highlightInputAsValid() {
 }
 
 function _reset() {
-    document.getElementById("countryWrapper").classList.add("hidden");
+    _clearCountrySection();
     let classList = document.getElementById("phone-input").classList;
 
     classList.remove("invalid");

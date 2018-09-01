@@ -48,5 +48,6 @@ task integrationTest(type: Test) {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web:2.0.2.RELEASE')
+	compile('org.jsoup:jsoup:1.11.3')
 	testCompile('org.springframework.boot:spring-boot-starter-test:2.0.2.RELEASE')
 }

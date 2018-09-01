@@ -1,11 +1,15 @@
 package mmm.neotech.phoneValidationService;
 
+import mmm.neotech.phoneValidationService.phonecodes.enitites.Country;
+
+import java.util.List;
+
 public class ValidationResponse {
     public boolean valid;
-    public String countryCode;
+    public List<Country> countries;
 
-    public ValidationResponse(boolean valid, String countryCode) {
+    public ValidationResponse(boolean valid, List<Country> countries) {
         this.valid = valid;
-        this.countryCode = countryCode;
+        this.countries = countries;
     }
 }
