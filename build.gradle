@@ -23,6 +23,28 @@ repositories {
 	mavenCentral()
 }
 
+sourceSets {
+    integrationTest {
+
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file("src/integrationTest/java")
+        }
+        resources.srcDir file("src/integrationTest/resources")
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+task integrationTest(type: Test) {
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }
+}
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web:2.0.2.RELEASE')
