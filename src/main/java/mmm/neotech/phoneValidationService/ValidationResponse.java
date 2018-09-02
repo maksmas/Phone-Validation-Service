@@ -10,6 +10,9 @@ public class ValidationResponse {
     public String errorMessage;
     public List<Country> countries;
 
+    // for json deserialization
+    public ValidationResponse() {}
+
     public ValidationResponse(List<Country> countries) {
         this.valid = true;
         this.countries = countries;

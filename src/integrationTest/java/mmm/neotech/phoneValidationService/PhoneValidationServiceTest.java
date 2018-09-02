@@ -1,7 +1,6 @@
 package mmm.neotech.phoneValidationService;
 
 import mmm.neotech.phoneValidationService.phonecodes.enitites.Country;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collections;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -59,15 +60,15 @@ public class PhoneValidationServiceTest {
     public void returnsValidResponseForCorrectNumbers() {
         ValidationResponse response = phoneValidationService.validatePhoneNumber("+3712900000");
 
-        Assert.assertTrue(response.valid);
-        Assert.assertNull(response.errorMessage);
-        Assert.assertEquals(response.countries.size(), 1);
-        Assert.assertEquals(response.countries.get(0), new Country("LV", "Latvia"));
+        assertTrue(response.valid);
+        assertNull(response.errorMessage);
+        assertEquals(response.countries.size(), 1);
+        assertEquals(response.countries.get(0), new Country("LV", "Latvia"));
     }
 
     private void assertValidationResponseWrong(ValidationResponse response, ErrorMessages error) {
-        Assert.assertFalse(response.valid);
-        Assert.assertEquals(response.countries, Collections.emptyList());
-        Assert.assertEquals(response.errorMessage, error.message);
+        assertFalse(response.valid);
+        assertEquals(response.countries, Collections.emptyList());
+        assertEquals(response.errorMessage, error.message);
     }
 }

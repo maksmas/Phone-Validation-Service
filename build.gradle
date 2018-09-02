@@ -35,6 +35,12 @@ sourceSets {
     }
 }
 
+build {
+    reporting {
+        enabled = true
+    }
+}
+
 configurations {
     integrationTestCompile.extendsFrom testCompile
     integrationTestRuntime.extendsFrom testRuntime
@@ -45,6 +51,9 @@ task integrationTest(type: Test) {
     classpath = sourceSets.integrationTest.runtimeClasspath
     outputs.upToDateWhen { false }
 }
+
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web:2.0.2.RELEASE')

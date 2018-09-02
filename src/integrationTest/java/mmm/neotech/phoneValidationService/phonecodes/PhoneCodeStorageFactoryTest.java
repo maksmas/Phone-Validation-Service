@@ -2,7 +2,6 @@ package mmm.neotech.phoneValidationService.phonecodes;
 
 import mmm.neotech.phoneValidationService.phonecodes.enitites.Country;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -47,14 +47,14 @@ public class PhoneCodeStorageFactoryTest {
         PhoneCodeStorage storage = phoneCodeStorageFactory.createStorage();
 
         List<Country> countries = storage.get("+371");
-        Assert.assertEquals(1, countries.size());
-        Assert.assertEquals("LV", countries.get(0).code);
-        Assert.assertEquals("Latvia", countries.get(0).title);
+        assertEquals(1, countries.size());
+        assertEquals("LV", countries.get(0).code);
+        assertEquals("Latvia", countries.get(0).title);
 
         countries = storage.get("+290");
-        Assert.assertEquals(2, countries.size());
-        Assert.assertTrue(countries.contains(new Country("SH", "Saint Helena")));
-        Assert.assertTrue(countries.contains(new Country("TA", "Tristan da Cunha")));
+        assertEquals(2, countries.size());
+        assertTrue(countries.contains(new Country("SH", "Saint Helena")));
+        assertTrue(countries.contains(new Country("TA", "Tristan da Cunha")));
     }
 
     @After

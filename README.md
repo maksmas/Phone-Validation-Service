@@ -12,6 +12,3 @@ phone validation service for neotech
 ## PS
 1. `gradlew` is located in root for convenience
 2. both integration and unit tests are executed on ```gradle build```
-
-## TODO
-1. endpoint test

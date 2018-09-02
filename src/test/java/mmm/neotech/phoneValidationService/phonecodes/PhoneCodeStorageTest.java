@@ -1,11 +1,12 @@
 package mmm.neotech.phoneValidationService.phonecodes;
 
 import mmm.neotech.phoneValidationService.phonecodes.enitites.Country;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.Assert.*;
 
 public class PhoneCodeStorageTest {
     @Test
@@ -22,17 +23,17 @@ public class PhoneCodeStorageTest {
         storage.flush();
 
         List<Country> countries = storage.get("+1");
-        Assert.assertEquals(1, countries.size());
-        Assert.assertEquals("TEST", countries.get(0).code);
-        Assert.assertEquals("TESTTITLE", countries.get(0).title);
+        assertEquals(1, countries.size());
+        assertEquals("TEST", countries.get(0).code);
+        assertEquals("TESTTITLE", countries.get(0).title);
 
         countries = storage.get("+2");
-        Assert.assertEquals(2, countries.size());
-        Assert.assertEquals("TEST2", countries.get(0).code);
-        Assert.assertEquals("Test 2 Title", countries.get(0).title);
+        assertEquals(2, countries.size());
+        assertEquals("TEST2", countries.get(0).code);
+        assertEquals("Test 2 Title", countries.get(0).title);
 
-        Assert.assertEquals("TEST3", countries.get(1).code);
-        Assert.assertEquals("Test 3 Title", countries.get(1).title);
+        assertEquals("TEST3", countries.get(1).code);
+        assertEquals("Test 3 Title", countries.get(1).title);
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -58,26 +59,26 @@ public class PhoneCodeStorageTest {
         storage.flush();
 
         Optional<String> foundCode = storage.extractCountryCode("+12345678");
-        Assert.assertEquals("+1", foundCode.get());
+        assertEquals("+1", foundCode.get());
 
         foundCode = storage.extractCountryCode("+11345678");
-        Assert.assertEquals("+11", foundCode.get());
+        assertEquals("+11", foundCode.get());
 
         foundCode = storage.extractCountryCode("+11123");
         // +1 because minimum number (without phone code) len is 4. So 1123 goes for number and +1 goes for code
-        Assert.assertEquals("+1", foundCode.get());
+        assertEquals("+1", foundCode.get());
 
         foundCode = storage.extractCountryCode("+11145678");
-        Assert.assertEquals("+111", foundCode.get());
+        assertEquals("+111", foundCode.get());
 
         foundCode = storage.extractCountryCode("+11245678");
-        Assert.assertEquals("+112", foundCode.get());
+        assertEquals("+112", foundCode.get());
 
         foundCode = storage.extractCountryCode("+21345678");
-        Assert.assertEquals("+2", foundCode.get());
+        assertEquals("+2", foundCode.get());
 
         foundCode = storage.extractCountryCode("+31111111111");
-        Assert.assertFalse(foundCode.isPresent());
+        assertFalse(foundCode.isPresent());
     }
 
     @Test
@@ -90,9 +91,9 @@ public class PhoneCodeStorageTest {
         storage.addPhoneCode("+2");
 
         List<Country> countries = storage.get("+1");
-        Assert.assertEquals(1, countries.size());
-        Assert.assertEquals("TEST", countries.get(0).code);
-        Assert.assertEquals("TESTTITLE", countries.get(0).title);
+        assertEquals(1, countries.size());
+        assertEquals("TEST", countries.get(0).code);
+        assertEquals("TESTTITLE", countries.get(0).title);
     }
 
     @Test
@@ -104,14 +105,14 @@ public class PhoneCodeStorageTest {
         storage.flush();
 
         List<Country> countries = storage.get("+1234");
-        Assert.assertEquals(1, countries.size());
-        Assert.assertEquals("TEST", countries.get(0).code);
-        Assert.assertEquals("TEST TITLE", countries.get(0).title);
+        assertEquals(1, countries.size());
+        assertEquals("TEST", countries.get(0).code);
+        assertEquals("TEST TITLE", countries.get(0).title);
     }
 
     @Test
     public void returnsEmptyListForNonExistingKeys() {
-        Assert.assertTrue(new PhoneCodeStorage().get("+1").isEmpty());
+        assertTrue(new PhoneCodeStorage().get("+1").isEmpty());
     }
 
     @Test(expected = IllegalStateException.class)
