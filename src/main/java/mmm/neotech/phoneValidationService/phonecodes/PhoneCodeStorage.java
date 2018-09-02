@@ -1,13 +1,13 @@
 package mmm.neotech.phoneValidationService.phonecodes;
 
 import mmm.neotech.phoneValidationService.phonecodes.enitites.Country;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+import static mmm.neotech.phoneValidationService.PhoneConstants.MAX_COUNTRY_CODE_LENGTH;
+import static mmm.neotech.phoneValidationService.PhoneConstants.MIN_PHONE_LENGTH_WITHOUT_COUNTRY_CODE;
+
 public class PhoneCodeStorage {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PhoneCodeStorage.class);
     private HashMap<String, List<Country>> state = new HashMap<>();
 
     private String bufferedPhoneCode = null;
@@ -18,19 +18,32 @@ public class PhoneCodeStorage {
         return countries == null ? Collections.emptyList() : countries;
     }
 
-    public void addItemToBuffer(String code, String title) {
-        if (code != null && !code.equals("+")) {
-            code = code.replaceAll(" ","");
+    public Optional<String> extractCountryCode(String phoneNumber) {
+        int maxPossibleCodeLength = phoneNumber.length() - MIN_PHONE_LENGTH_WITHOUT_COUNTRY_CODE;
 
-            if (isPhoneCode(code)) {
-                flush();
-                bufferedPhoneCode = code;
-            } else if (code.length() > 0) {
-                bufferedCountries.add(new Country(code, title));
-            }
-        } else {
-            LOGGER.warn("Wrong inputs to addItemToBuffer code: '" + code + "', title: '" + title + "'");
+        if (maxPossibleCodeLength > MAX_COUNTRY_CODE_LENGTH) {
+            maxPossibleCodeLength = MAX_COUNTRY_CODE_LENGTH;
         }
+
+        for (int i = maxPossibleCodeLength; i > 1; --i) {
+            String possibleCode = phoneNumber.substring(0, i);
+
+            if (state.containsKey(possibleCode)) {
+                return Optional.of(possibleCode);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    public void addPhoneCode(String phoneCode) {
+        flush();
+        phoneCode = phoneCode.replace(" ", "");
+        bufferedPhoneCode = phoneCode;
+    }
+
+    public void addCountry(String countryCode, String countryTitle) {
+        bufferedCountries.add(new Country(countryCode, countryTitle));
     }
 
     public void flush() {
@@ -44,9 +57,5 @@ public class PhoneCodeStorage {
 
         bufferedPhoneCode = null;
         bufferedCountries = new ArrayList<>();
-    }
-
-    private boolean isPhoneCode(String code) {
-        return code.startsWith("+");
     }
 }

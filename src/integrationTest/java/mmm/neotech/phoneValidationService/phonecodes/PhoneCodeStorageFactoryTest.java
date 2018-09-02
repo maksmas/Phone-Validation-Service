@@ -55,7 +55,6 @@ public class PhoneCodeStorageFactoryTest {
         Assert.assertEquals(2, countries.size());
         Assert.assertTrue(countries.contains(new Country("SH", "Saint Helena")));
         Assert.assertTrue(countries.contains(new Country("TA", "Tristan da Cunha")));
-
     }
 
     @After

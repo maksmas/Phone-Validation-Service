@@ -1,5 +1,6 @@
-const DEBOUNCE_MS = 500;
+const DEBOUNCE_MS = 300;
 const VALIDATE_ENDPOINT = "/validate";
+const ENCODED_PLUS = encodeURIComponent("+");
 
 function validatePhone(phone) {
     if (phone && phone.length > 1) {
@@ -10,8 +11,8 @@ function validatePhone(phone) {
 
             _debounce(validationFlow, DEBOUNCE_MS);
         } else {
-            _clearCountrySection();
             _highlightInputAsInvalid();
+            _displayError("Number should start with +");
         }
     } else {
         _reset();
@@ -19,9 +20,7 @@ function validatePhone(phone) {
 }
 
 function _sendValidateRequest(phone) {
-    const encodedPlus = encodeURIComponent("+");
-
-    return fetch(`${VALIDATE_ENDPOINT}?phone=${encodedPlus}${phone.substring(1)}`).then(
+    return fetch(`${VALIDATE_ENDPOINT}?phone=${ENCODED_PLUS}${phone.substring(1)}`).then(
         wrappedResponse => wrappedResponse.json()
     );
 }
@@ -31,8 +30,8 @@ function _handleValidationResponse(validationResponse) {
         _highlightInputAsValid();
         _displayCountrySection(validationResponse.countries);
     } else {
-        _clearCountrySection();
         _highlightInputAsInvalid();
+        _displayError(validationResponse.errorMessage);
     }
 }
 
@@ -61,6 +60,18 @@ function _displayCountrySection(countries) {
         wrapperElement.appendChild(spanElement);
         wrapperElement.appendChild(document.createElement("br"));
     }
+}
+
+function _displayError(error) {
+    _clearCountrySection();
+
+    const wrapperElement = document.getElementById("countryWrapper");
+
+    let spanElement = document.createElement("span");
+    spanElement.classList.add("error");
+    spanElement.appendChild(document.createTextNode(error));
+
+    wrapperElement.appendChild(spanElement);
 }
 
 function _highlightInputAsInvalid() {

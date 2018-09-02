@@ -14,18 +14,17 @@
 body {
     font-family: monospace;
     height: 100vh;
-    width: 100vw;
     text-align: center;
     padding: 0;
     margin: 0;
 }
 
-body .wrapper {
+.wrapper {
     padding-top: var(--pad);
     height: var(--wrapperHeight);
 }
 
-body .wrapper input {
+.wrapper input {
     height: var(--input-height);
     border: #cccccc solid 1px;
     border-radius: 5px;
@@ -34,31 +33,35 @@ body .wrapper input {
     padding-left: var(--pad);
 }
 
-body .wrapper input:focus {
+.wrapper input:focus {
     border: #cccccc solid 1px;
     border-radius: 5px;
 }
 
-body .wrapper input.invalid {
+.wrapper input.invalid {
     border-color: lightcoral;
     background-color: #f0808021;
 }
 
-body .wrapper input.valid {
+.wrapper input.valid {
     border-color: lightgreen;
     background-color: #90ee901f;
 }
 
-body .wrapper .countryWrapper {
+.wrapper .countryWrapper {
     padding-top: var(--pad);
     height: var(--country-section-height);
 }
 
-body .wrapper .countryWrapper img {
+.wrapper .countryWrapper img {
     height: var(--flag-height);
 }
 
-body .wrapper .countryWrapper span {
+.wrapper .countryWrapper span {
     padding-left: var(--pad);
     font-size: 1.25rem;
+}
+
+.wrapper .countryWrapper span.error {
+    color: red;
 }

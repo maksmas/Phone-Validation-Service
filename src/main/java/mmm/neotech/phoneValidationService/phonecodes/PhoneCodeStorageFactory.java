@@ -11,7 +11,12 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static mmm.neotech.phoneValidationService.PhoneConstants.MAX_COUNTRY_CODE_LENGTH;
+import static mmm.neotech.phoneValidationService.PhoneConstants.MIN_COUNTRY_CODE_LENGTH;
 
 @Component
 public class PhoneCodeStorageFactory {
@@ -50,12 +55,18 @@ public class PhoneCodeStorageFactory {
             for (Element anchor : anchors) {
                 String innerHtml = anchor.html();
 
-                if (BLACKLIST.contains(innerHtml)) {
+                if (innerHtml == null || BLACKLIST.contains(innerHtml)) {
                     continue;
                 }
 
-                String title = anchor.attr("title");
-                phoneCodeStorage.addItemToBuffer(innerHtml, title);
+                innerHtml = innerHtml.trim();
+
+                if (isPhoneCode(innerHtml)) {
+                    phoneCodeStorage.addPhoneCode(innerHtml);
+                } else {
+                    String title = anchor.attr("title");
+                    phoneCodeStorage.addCountry(innerHtml.toUpperCase(), title.trim());
+                }
             }
         }
 
@@ -81,5 +92,11 @@ public class PhoneCodeStorageFactory {
         }
 
         return Optional.empty();
+    }
+
+    private boolean isPhoneCode(String code) {
+        return code.startsWith("+") &&
+               code.length() >= MIN_COUNTRY_CODE_LENGTH &&
+               code.length() <= MAX_COUNTRY_CODE_LENGTH;
     }
 }

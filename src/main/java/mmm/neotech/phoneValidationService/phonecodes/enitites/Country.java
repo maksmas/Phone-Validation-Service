@@ -10,7 +10,7 @@ public class Country {
         assert code != null;
 
         this.code = code;
-        this.title = title != null ? title.trim() : null;
+        this.title = title;
     }
 
     @Override
@@ -23,11 +23,6 @@ public class Country {
 
     @Override
     public int hashCode() {
-        return Objects.hash(code, title);
-    }
-
-    @Override
-    public String toString() {
-        return code + " (" + title + ")";
+        return Objects.hash(code);
     }
 }
