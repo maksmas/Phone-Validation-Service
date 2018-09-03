@@ -50,7 +50,7 @@ function _displayCountrySection(countries) {
 
     for (const country of countries) {
         let imgElement = document.createElement("img");
-        imgElement.setAttribute("src", `./flags/${country.code}.svg`);
+        imgElement.setAttribute("src", `./flags/${country.code.toLowerCase()}.svg`);
         imgElement.setAttribute("onerror", "this.src = './flags/globe.svg'");
 
         let spanElement = document.createElement("span");
